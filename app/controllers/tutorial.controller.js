@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Alguns erros ocorreram enquanto criava tutoriais"
       });
     else res.send(data);
   });
