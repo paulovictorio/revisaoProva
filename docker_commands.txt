@@ -1,0 +1,30 @@
+1. Baixar a imagem do MySQL
+docker pull mysql
+
+2. Criar um container MySQL
+docker run --name ct-db-mysql -e MYSQL_ROOT_PASSWORD=DSM@123 -p 3306:3306 -d mysql
+
+3. Criar o Dockerfile para o backend
+# (Conteúdo do Dockerfile conforme descrito acima)
+
+4. Construir a imagem do backend
+docker build -t im-api .
+
+5. Criar e executar o container do backend
+docker run --name ct-api -p 4000:4000 -d im-api
+
+6. Ver logs do container do backend
+docker logs ct-api
+
+7. Ver logs do container MySQL
+docker logs ct-db-mysql
+
+8. Parar e remover os containers
+docker stop ct-api
+docker stop ct-db-mysql
+docker rm ct-api
+docker rm ct-db-mysql
+
+9. Remover as imagens
+docker rmi im-api
+docker rmi mysql
