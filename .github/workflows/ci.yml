@@ -3,7 +3,7 @@ name: Versionamento
 on:
   push:
     branches:
-      - master  # Alterado para master, conforme instruções
+      - master
 
 jobs:
   build:
@@ -88,18 +88,21 @@ jobs:
 
           echo "Nova versão: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+        outputs:
+          new_version: $NEW_VERSION
 
       - name: Atualizar versão no package.json
         run: |
-          npm version ${{ env.new_version }} --no-git-tag-version
+          npm version ${{ steps.version.outputs.new_version }} --no-git-tag-version
 
       - name: Commit e push
+        if: steps.version.outputs.new_version != 'v0.0.0'
         env:
           GH_TOKEN: ${{ secrets.TOKEN_GIT }}
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add package.json
-          git commit -m "chore(release): version ${{ env.new_version }}"
-          git tag v${{ env.new_version }}
-          git push origin master --tags  # Certifique-se que 'master' é a branch correta
+          git commit -m "chore(release): version ${{ steps.version.outputs.new_version }}"
+          git tag v${{ steps.version.outputs.new_version }}
+          git push origin master --tags
